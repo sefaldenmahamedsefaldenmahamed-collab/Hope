@@ -55,8 +55,8 @@ ch = logging.StreamHandler(); ch.setFormatter(fmt); logger.addHandler(ch)
 
 import os
 
-# تحديد المسار المطلق للمجلد الحالي لضمان صلاحيات الكتابة بنجاح
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# استخدام مجلد /tmp المضمون للصلاحيات على Render
+BASE_DIR = "/tmp"
 DEFAULT_DB_PATH = os.path.join(BASE_DIR, "dual_v11.db")
 
 db_file = os.environ.get('DB_FILE', DEFAULT_DB_PATH)
