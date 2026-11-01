@@ -980,7 +980,6 @@ class DualStrategyBot:
                           else "https://fapi.binance.com")
         self.time_offset_ms = 0
 
-        import os
         DB_PATH = "/tmp/dual_v11.db"
         self.db = DatabaseManager(DB_PATH)
         self.trend = TrendStrategy(None, logger.warning)
