@@ -60,7 +60,7 @@ def check_outbound_ip():
         # استخدام ipify لمعرفة الـ IP الخارجي
         response = requests.get('https://api.ipify.org?format=json', timeout=10)
         ip_address = response.json().get('ip')
-        print(f"Current Outbound IP on Railway: {ip_address}")
+        print(f"Current Outbound IP on Render: {ip_address}")
         return ip_address
     except Exception as e:
         print(f"Failed to fetch IP: {e}")
