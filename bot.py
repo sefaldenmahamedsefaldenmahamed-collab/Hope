@@ -981,7 +981,7 @@ class DualStrategyBot:
         self.time_offset_ms = 0
 
   
-      DB_PATH = "/tmp/dual_v11.db"
+        DB_PATH = "/tmp/dual_v11.db"
         self.db = DatabaseManager(DB_PATH)
         self.trend = TrendStrategy(None, logger.warning)
         self.trend_exit = TrendExitManager(None, logger.warning)
