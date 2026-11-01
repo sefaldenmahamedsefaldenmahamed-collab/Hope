@@ -66,8 +66,8 @@ class DatabaseManager:
     """قاعدة مشتركة: الصفقات الحية + أرباح الأيام + سجل الإشارات + الإعدادات.
     كل استراتيجية إضافةً لذلك لها قاعدة صفقات مستقلة خاصة بها (trend_*/mars_*)."""
 
-    def __init__(self, db_name='dual_v11.db'):
-        self.db_name = db_name
+    def __init__(self, db_name=None):
+        self.db_name = db_name or DEFAULT_DB_PATH
 
     async def init_db(self):
         async with aiosqlite.connect(self.db_name) as db:
