@@ -53,7 +53,23 @@ fh = RotatingFileHandler('bot.log', maxBytes=2*1024*1024, backupCount=2, encodin
 fh.setFormatter(fmt); logger.addHandler(fh)
 ch = logging.StreamHandler(); ch.setFormatter(fmt); logger.addHandler(ch)
 
+import requests
 
+def check_outbound_ip():
+    try:
+        # استخدام ipify لمعرفة الـ IP الخارجي
+        response = requests.get('https://api.ipify.org?format=json', timeout=10)
+        ip_address = response.json().get('ip')
+        print(f"Current Outbound IP on Render: {ip_address}")
+        return ip_address
+    except Exception as e:
+        print(f"Failed to fetch IP: {e}")
+        return None
+
+# استدعاء الدالة عند بدء تشغيل البوت
+if __name__ == "__main__":
+    check_outbound_ip()
+  
 # استخدام مجلد /tmp المضمون للصلاحيات على Render
 BASE_DIR = "/tmp"
 DEFAULT_DB_PATH = os.path.join(BASE_DIR, "dual_v11.db")
