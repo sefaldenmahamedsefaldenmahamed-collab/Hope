@@ -53,7 +53,6 @@ fh = RotatingFileHandler('bot.log', maxBytes=2*1024*1024, backupCount=2, encodin
 fh.setFormatter(fmt); logger.addHandler(fh)
 ch = logging.StreamHandler(); ch.setFormatter(fmt); logger.addHandler(ch)
 
-import os
 
 # استخدام مجلد /tmp المضمون للصلاحيات على Render
 BASE_DIR = "/tmp"
