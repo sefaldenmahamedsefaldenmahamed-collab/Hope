@@ -53,6 +53,13 @@ fh = RotatingFileHandler('bot.log', maxBytes=2*1024*1024, backupCount=2, encodin
 fh.setFormatter(fmt); logger.addHandler(fh)
 ch = logging.StreamHandler(); ch.setFormatter(fmt); logger.addHandler(ch)
 
+import os
+
+# تحديد المسار المطلق للمجلد الحالي لضمان صلاحيات الكتابة بنجاح
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DEFAULT_DB_PATH = os.path.join(BASE_DIR, "dual_v11.db")
+
+db_file = os.environ.get('DB_FILE', DEFAULT_DB_PATH)
 
 # ═══════════════════════ قاعدة البيانات المشتركة ═══════════════════════
 class DatabaseManager:
