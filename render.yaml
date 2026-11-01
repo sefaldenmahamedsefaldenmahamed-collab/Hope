@@ -1,0 +1,50 @@
+# ═════════════════════════════════════════════════════════
+#  إعداد Render للأوثر ثنائي الاستراتيجية V11
+#  يوزّع: خدمات + قرص دائم (البوت يحتاج قرصاً دائماً 100%)
+# ═════════════════════════════════════════════════════════
+services:
+  # ── خدمة البوت مع لوحة ──
+  - type: web
+    name: dual-v11-bot
+    runtime: docker
+    plan: starter        # ⚠️ الخطة المجانية ستسبن-داون بعد 15 دقيقة بدون زوار وبوت يتوقف
+    healthCheckPath: /trend
+    autoDeploy: true
+    envVars:
+      - key: DB_FILE
+        value: /data/dual_v11.db     # ⬅️ مهم جداً — بدونه القاعدة تنحفظ في ذاكرة الحاوية المؤقتة وتختفي كل إعادة نشر
+      - key: TRADE_ENABLED
+        value: "true"
+      - key: TESTNET
+        value: "true"       # ⚠️ غيّرها إلى "false" للحساب الحقيقي
+      - key: TRADE_SIZE_USDT
+        value: "14"
+      - key: MAX_TOTAL_TRADES
+        value: "5"
+      - key: MAX_OPEN_TRADES_TREND
+        value: "5"
+      - key: MAX_OPEN_TRADES_MARS
+        value: "5"
+      - key: PORT
+        value: "8080"
+      - key: TZ
+        value: "Asia/Riyadh"
+      # المفاتيح تُضاف يدوياً في لوحة Render (Environment) — وليس هنا:
+      # BINANCE_API_KEY    = مفتاحك
+      # BINANCE_API_SECRET = سرك
+    disk:
+      name: bot-data
+      mountPath: /data      # ⬅️ مكان القاعدة الدائم — ينجو من كل إعادة نشر وسبين-داون
+      sizeGB: 1
+
+  # ── خيار ثاني (موصى به للبوت): عامل خلفي لا يسبن-داون أبداً ──
+  # استخدم الكود أدناه بدل الـ web أعلاه إن كنت تدفع للأوثر على Render:
+  #
+  # - type: worker
+  #   name: dual-v11-bot-worker
+  #   runtime: docker
+  #   envVars: نفس المفاتيح أعلاه
+  #   disk:
+  #     name: bot-data
+  #     mountPath: /data
+  #     sizeGB: 1
