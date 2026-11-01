@@ -980,14 +980,15 @@ class DualStrategyBot:
                           else "https://fapi.binance.com")
         self.time_offset_ms = 0
 
-        DB_PATH = "/tmp/dual_v11.db"
+  
+      DB_PATH = "/tmp/dual_v11.db"
         self.db = DatabaseManager(DB_PATH)
         self.trend = TrendStrategy(None, logger.warning)
         self.trend_exit = TrendExitManager(None, logger.warning)
-        self.trend_db = TrendDB(db_file)
+        self.trend_db = TrendDB(os.path.join(BASE_DIR, "dual_v11.db"))
         self.mars = MaRsiStrategy(None, logger.warning)
         self.mars_exit = MaRsiExitManager(None, logger.warning)
-        self.mars_db = MarsDB(db_file)
+        self.mars_db = MarsDB(os.path.join(BASE_DIR, "dual_v11.db"))
 
         self.session = None
         self.ws_task = None
