@@ -70,25 +70,20 @@ fh = RotatingFileHandler(os.path.join('/tmp', 'bot.log'), maxBytes=2*1024*1024, 
 fh.setFormatter(fmt); logger.addHandler(fh)
 ch = logging.StreamHandler(); ch.setFormatter(fmt); logger.addHandler(ch)
 
-import urllib.request
 
-def get_outbound_ip():
-    urls = [
-        "https://api.ipify.org",
-        "https://ifconfig.me/ip",
-        "https://icanhazip.com",
-        "https://checkip.amazonaws.com"
-    ]
-    for url in urls:
-        try:
-            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-            with urllib.request.urlopen(req, timeout=5) as resp:
-                ip = resp.read().decode('utf-8').strip()
-                if ip:
-                    return ip
-        except Exception:
-            continue
-    return "Unknown"
+# ─── دالة فحص الـ IP الصادر عند الإقلاع ───
+def check_outbound_ip():
+    try:
+        response = requests.get('https://api.ipify.org?format=json', timeout=10)
+        ip_address = response.json().get('ip')
+        logger.info(f"Current Outbound IP on Railway: {ip_address}")
+        return ip_address
+    except Exception as e:
+        logger.warning(f"Failed to fetch IP: {e}")
+        return None
+
+# استدعاء الفحص مباشرة عند بدء التشغيل
+check_outbound_ip()
 
 # استدعاء الدالة عند بدء تشغيل البوت
 if __name__ == "__main__":
