@@ -70,30 +70,25 @@ fh = RotatingFileHandler(os.path.join('/tmp', 'bot.log'), maxBytes=2*1024*1024, 
 fh.setFormatter(fmt); logger.addHandler(fh)
 ch = logging.StreamHandler(); ch.setFormatter(fmt); logger.addHandler(ch)
 
-import requests
+import urllib.request
 
-def check_outbound_ip():
-    try:
-        # جلب الـ IP الخارجي مع الدولة للتأكد من عدم الوقوع في منطقة محظورة
-        response = requests.get('https://ipapi.co/json/', timeout=10)
-        data = response.json()
-        ip_address = data.get('ip')
-        country = data.get('country_name', 'Unknown')
-        city = data.get('city', '')
-        region = os.environ.get('RAILWAY_REGION', 'Railway')
-        
-        print(f"🌐 Current Outbound IP on Railway ({region}): {ip_address} | Location: {city}, {country}")
-        logger.info(f"🌐 Outbound IP: {ip_address} ({city}, {country})")
-        return ip_address
-    except Exception as e:
-        # احتياطي في حال تعطل الخدمة الأولى
+def get_outbound_ip():
+    urls = [
+        "https://api.ipify.org",
+        "https://ifconfig.me/ip",
+        "https://icanhazip.com",
+        "https://checkip.amazonaws.com"
+    ]
+    for url in urls:
         try:
-            ip_address = requests.get('https://api.ipify.org?format=json', timeout=5).json().get('ip')
-            print(f"🌐 Current Outbound IP on Railway: {ip_address}")
-            return ip_address
-        except Exception as e2:
-            print(f"⚠️ Failed to fetch IP: {e2}")
-            return None
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            with urllib.request.urlopen(req, timeout=5) as resp:
+                ip = resp.read().decode('utf-8').strip()
+                if ip:
+                    return ip
+        except Exception:
+            continue
+    return "Unknown"
 
 # استدعاء الدالة عند بدء تشغيل البوت
 if __name__ == "__main__":
