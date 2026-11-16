@@ -74,14 +74,26 @@ import requests
 
 def check_outbound_ip():
     try:
-        # استخدام ipify لمعرفة الـ IP الخارجي
-        response = requests.get('https://api.ipify.org?format=json', timeout=10)
-        ip_address = response.json().get('ip')
-        print(f"Current Outbound IP on Render: {ip_address}")
+        # جلب الـ IP الخارجي مع الدولة للتأكد من عدم الوقوع في منطقة محظورة
+        response = requests.get('https://ipapi.co/json/', timeout=10)
+        data = response.json()
+        ip_address = data.get('ip')
+        country = data.get('country_name', 'Unknown')
+        city = data.get('city', '')
+        region = os.environ.get('RAILWAY_REGION', 'Railway')
+        
+        print(f"🌐 Current Outbound IP on Railway ({region}): {ip_address} | Location: {city}, {country}")
+        logger.info(f"🌐 Outbound IP: {ip_address} ({city}, {country})")
         return ip_address
     except Exception as e:
-        print(f"Failed to fetch IP: {e}")
-        return None
+        # احتياطي في حال تعطل الخدمة الأولى
+        try:
+            ip_address = requests.get('https://api.ipify.org?format=json', timeout=5).json().get('ip')
+            print(f"🌐 Current Outbound IP on Railway: {ip_address}")
+            return ip_address
+        except Exception as e2:
+            print(f"⚠️ Failed to fetch IP: {e2}")
+            return None
 
 # استدعاء الدالة عند بدء تشغيل البوت
 if __name__ == "__main__":
