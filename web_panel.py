@@ -1095,9 +1095,10 @@ function cfgRead(){
       const n = parseFloat(el.value);
       v = isNaN(n) ? el.value : n;  // رقم إن أمكن، وإلا النص الأصلي
     } else {
-      // select أو text: نحاول تحويله لرقم إن أمكن (لكن الألوان والنصوص تبقى نصوصاً)
+      // select أو text: نحاول تحويله لرقم إن أمكن (لكن الفريمات والألوان والنصوص تبقى نصوصاً)
+      // ملاحظة: نستخدم Number() بدل parseFloat() لأن parseFloat("1h")=1 (خطأ!) بينما Number("1h")=NaN (صحيح)
       const s = el.value;
-      const n = parseFloat(s);
+      const n = Number(s);
       v = (s !== '' && !isNaN(n) && !DISPLAY_FIELDS.has(f)) ? n : s;
     }
     out[f] = v;
